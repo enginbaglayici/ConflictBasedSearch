@@ -186,9 +186,10 @@ std::vector<Cell> LowLevelSolver::solve(std::vector<Constraint> constraints, Map
 	while (!(findMinCostCell(OPEN) == goal)) {
 		current_cell = findMinCostCell(OPEN);
 		current_cell.parent = findParent(OPEN);
-		OPEN.erase(std::min_element(OPEN.begin(), OPEN.end(), compareF));
-		CLOSE.push_back(current_cell);
-
+		if (!OPEN.empty()) {
+			OPEN.erase(std::min_element(OPEN.begin(), OPEN.end(), compareF));
+		}
+		
 		/*
 		if (goal.x == 1 && goal.y == 1 && current_cell.x == 2 && current_cell.y == 1) {
  			std::cout << "";
@@ -239,23 +240,25 @@ std::vector<Cell> LowLevelSolver::solve(std::vector<Constraint> constraints, Map
 			}
 
 			updateCostFunction(successor, current_cell, goal, start);
-
+		
 			if (contains(OPEN, successor))
 			{
 				auto index = findIndex(OPEN, successor);
-				if (OPEN[index].f > successor.f)
+				if (OPEN[index].g < successor.g)
 				{
-					OPEN.erase(OPEN.begin() + index);
+					continue;
 				}
 			}
 
 			if (contains(CLOSE, successor))
 			{
 				auto index = findIndex(CLOSE, successor);
-				if (CLOSE[index].f > successor.f)
+				if (CLOSE[index].g < successor.g)
 				{
-					CLOSE.erase(CLOSE.begin() + index);
+					continue;
 				}
+				CLOSE.erase(CLOSE.begin() + index);
+				OPEN.push_back(successor);
 			}
 
 			if (!(contains(OPEN, successor)) && !(contains(CLOSE, successor)))
@@ -264,11 +267,16 @@ std::vector<Cell> LowLevelSolver::solve(std::vector<Constraint> constraints, Map
 				{
 					successor.f = findHeuristicDistance(successor, goal);
 					path.emplace_back(std::make_pair(successor, current_cell));
+					successor.parent = &current_cell;
 				}
 				OPEN.push_back(successor);
 			}
+
 			successorCells.pop_back();
 		}
+
+		CLOSE.push_back(current_cell);
+
 		if (successor == goal) {
 			//	std::cout << "Goal cell is found.\n";
 			path.emplace_back(std::make_pair(successor, current_cell));

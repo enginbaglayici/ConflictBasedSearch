@@ -85,7 +85,7 @@ Map readMap(std::string filename) {
 void printMap(Map map) {
 	for (int i = 0; i < map.cells.size(); i++) {
 		for (int j = 0; j < map.cells[0].size(); j++) {
-			if (map.cells[i][j].isObstacle)
+			if (map.cells[j][i].isObstacle)
 				std::cout << "X";
 			else
 				std::cout << "_";
@@ -131,12 +131,11 @@ void printSolution(std::vector<std::vector<Cell>> optimalPaths) {
 
 int main() {
 	std::vector<std::vector<Cell>> optimalPaths;
-	Map map = readMap("data\\map2.txt");
+	Map map = readMap("data\\map3.txt");
 	printMap(map);
 	HighLevelSolver solver;
 	optimalPaths = solver.solve(map);
 	printSolution(optimalPaths);
-	//std::cout << " \n Hello";
 	return 0;
 }
 
