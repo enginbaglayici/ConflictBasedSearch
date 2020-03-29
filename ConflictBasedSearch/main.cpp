@@ -48,8 +48,8 @@ Map readMap(std::string filename) {
 	while (getline(k, s, ' ')) {
 
 		int obstacleIndex = std::stoi(s);
-		int y = obstacleIndex % row;
-		int x = obstacleIndex / row;
+		int x = obstacleIndex % row;
+		int y = obstacleIndex / row;
 
 		cells[x][y].isObstacle = true;
 	}
@@ -62,16 +62,17 @@ Map readMap(std::string filename) {
 	int agentID = 0;
 	while (infile >> start >> end) {
 
-		int startX = start / row;
-		int startY = start % row;
+		int startX = start % row;
+		int startY = start / row;
 
-		int endX = end / row;
-		int endY = end % row;
+		int endX = end % row;
+		int endY = end / row;
 
 		Agent agent(agentID);
 		agent.start = Cell(startX, startY);
 		agent.end = Cell(endX, endY);
-
+		std::cout << "start: "  << startX << startY;
+		std::cout << " end: " << endX << endY << "\n";
 		agents.emplace_back(agent);
 		agentID++;
 	}
@@ -118,26 +119,24 @@ unsigned int Factorial(unsigned int number) {
 }
 
 void printSolution(std::vector<std::vector<Cell>> optimalPaths) {
-	for (std::vector<Cell> cells : optimalPaths)
-	{
+
+	for (auto path : optimalPaths) {
 		std::cout << "Optimal path of agent \n";
-		for (Cell cell : cells)
-		{
+		for (auto cell : path) {
 			std::cout << cell.x << cell.y << "\n";
 		}
 	}
 }
 
+
 int main() {
-	/*
 	std::vector<std::vector<Cell>> optimalPaths;
-	Map map = readMap("map.txt");
+	Map map = readMap("data\\map2.txt");
 	printMap(map);
 	HighLevelSolver solver;
 	optimalPaths = solver.solve(map);
 	printSolution(optimalPaths);
-	*/
-	std::cout << "Hello";
+	//std::cout << " \n Hello";
 	return 0;
 }
 

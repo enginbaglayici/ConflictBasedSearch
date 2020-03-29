@@ -16,7 +16,6 @@ private:
 	int time;
 
 	inline bool isObstacle(Map map, int x, int y);
-
 	inline bool isEmpty(const std::vector<Cell> &vec);			//Checks if a given vector is empty
 	inline bool isConstraint(int agentID, int x, int y, int time, std::vector<Constraint> constraints);
 	inline bool contains(std::vector<Cell> cells, Cell cell);

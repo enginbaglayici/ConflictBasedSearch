@@ -55,14 +55,16 @@ inline bool LowLevelSolver::isValid(int x, int y, Map map) {
 
 //checks if the visited cell has a constraint
 bool LowLevelSolver::isConstraint(int agentID, int x, int y, int time, std::vector<Constraint> constraints) {
-	for (size_t i = 0; i < constraints.size(); i++) {
-		if (agentID == constraints[i].agentID) {
-			if (time == constraints[i].time && constraints[i].cell.x == x && constraints[i].cell.y == y) {
+	for(Constraint c : constraints) {
+		if (agentID == c.agentID) {
+			if (time == c.time && c.cell.x == x && c.cell.y == y) {
 				return true;
 			}
 		}
 	}
 	return false;
+
+	
 }
 
 bool compareF(Cell cell1, Cell cell2) {
@@ -78,7 +80,7 @@ void LowLevelSolver::updateCostFunction(Cell &successor, Cell &currentNode, Cell
 	successor.h = 0;
 	successor.g = 0;
 	successor.f = 0;
-	successor.g = currentNode.g + 1;
+	//successor.g = currentNode.g + 1;
 	successor.g = findHeuristicDistance(successor, start);
 	successor.h = findHeuristicDistance(successor, goal);
 	successor.f = successor.g + successor.h;
@@ -127,8 +129,8 @@ inline bool LowLevelSolver::contains(std::vector<Cell> cells, Cell cell) {
 
 inline int LowLevelSolver::findIndex(std::vector<Cell> cells, Cell cell) {							// BURADA CELLI KARSILASTIRMADA HATA VAR
 	int index = 0;
-	for (std::vector<Cell>::iterator it = cells.begin(); it != cells.end(); ++it) {
-		if (*it == cell)
+	for (Cell c : cells) {
+		if (c == cell)
 		{
 			break;
 		}
@@ -156,16 +158,10 @@ std::vector<Cell> LowLevelSolver::updatePath(std::vector<Cell> cells, std::vecto
 
 // for each agent find optimal path
 std::vector<std::vector<Cell>> LowLevelSolver::findOptimalPaths(std::vector<Constraint> constraints, Map map) {
+	
+	for (auto k = 0; k < map.agents.size(); k++) {
+		optimalPaths.emplace_back(solve(constraints, map, k));
 
-	for (size_t k = 0; k < map.agents.size(); k++) {
-		optimalPaths.emplace_back(solve(constraints, map, k + 1));
-
-		/*
-		for (Cell i : optimalPaths[k]) {
-
-			std::cout << i.x << i.y << "\n";
-		}
-		*/
 	}
 	return optimalPaths;
 }
@@ -174,12 +170,12 @@ std::vector<Cell> LowLevelSolver::solve(std::vector<Constraint> constraints, Map
 	Cell current_cell, temp_cell, child_cell, start, goal, successor;
 	optimalPath.clear();
 	successorCells.clear();
-	std::map<std::pair<int, int>, std::pair<int, int>> path;
-	start = map.agents[agentID - 1].start;
+	std::vector<std::pair<Cell, Cell>> path;
+	start = map.agents[agentID].start;
 	current_cell = start;
-	std::cout << "Start Cell is :" << current_cell.x << current_cell.y << " \n";
-	goal = map.agents[agentID - 1].end;
-	std::cout << "Goal Cell is :" << goal.x << goal.y << " \n";
+	//std::cout << "Start Cell is : " << current_cell.x << "," << current_cell.y << " \n";
+	goal = map.agents[agentID].end;
+	//std::cout << "Goal Cell is : " << goal.x << "," << goal.y << " \n";
 	child_cell = current_cell;
 	time = 1;
 	successor.parent = new Cell;
@@ -193,6 +189,11 @@ std::vector<Cell> LowLevelSolver::solve(std::vector<Constraint> constraints, Map
 		OPEN.erase(std::min_element(OPEN.begin(), OPEN.end(), compareF));
 		CLOSE.push_back(current_cell);
 
+		/*
+		if (goal.x == 1 && goal.y == 1 && current_cell.x == 2 && current_cell.y == 1) {
+ 			std::cout << "";
+		}
+		*/
 		if (isValid(current_cell.x - 1, current_cell.y, map) && !isConstraint(agentID, current_cell.x - 1, current_cell.y, time, constraints))
 		{
 			child_cell = current_cell;
@@ -262,7 +263,7 @@ std::vector<Cell> LowLevelSolver::solve(std::vector<Constraint> constraints, Map
 				if (&current_cell != NULL)
 				{
 					successor.f = findHeuristicDistance(successor, goal);
-					path.emplace(std::make_pair(successor.x, successor.y), std::make_pair(current_cell.x, current_cell.y));
+					path.emplace_back(std::make_pair(successor, current_cell));
 				}
 				OPEN.push_back(successor);
 			}
@@ -270,35 +271,47 @@ std::vector<Cell> LowLevelSolver::solve(std::vector<Constraint> constraints, Map
 		}
 		if (successor == goal) {
 			//	std::cout << "Goal cell is found.\n";
-			path.emplace(std::make_pair(successor.x, successor.y), std::make_pair(current_cell.x, current_cell.y));
+			path.emplace_back(std::make_pair(successor, current_cell));
 			break;
 		}
 		time++;
 	}
-
-	optimalPath.push_back(goal);
-	for (auto iter = path.begin(); iter != path.end(); iter++)
+	/*
+	for (auto elem : path)
 	{
-		if (iter->first.first == goal.x && iter->first.second == goal.y)
-		{
-			goal.x = iter->second.first;
-			goal.y = iter->second.second;
-			/*
-			std::cout << '\t' << iter->first.first
-				<< '\t' << iter->first.second << '\n';
-			*/
-			optimalPath.push_back(goal);
-			iter = path.begin();
-		}
-
+		std::cout << elem.first.x << " " << elem.first.y << " " << elem.second.x << " " << elem.second.y << std::endl;
 	}
+	*/
+	optimalPath.push_back(goal);
+	for (auto p1 : path) {
+		for (auto p : path) {
+			if (p.first == goal) {
+
+				for (Constraint c : constraints) {
+					if (c.cell == goal && agentID == c.agentID) {
+						optimalPath.push_back(p.second);
+					}
+				}
+
+				goal = p.second;
+
+				optimalPath.push_back(goal);
+			}
+		}
+	}
+
+	for (auto elem : optimalPath)
+	{
+		std::cout << elem.x << " " << elem.y << "\n";
+	}
+	std::cout << " \n \n";
 
 	path.clear();
 	OPEN.clear();
 	CLOSE.clear();
 	std::reverse(optimalPath.begin(), optimalPath.end());
-	return updatePath(optimalPath, constraints);
-	//return optimalPath;
+	//return updatePath(optimalPath, constraints);
+	return optimalPath;
 }
 
 

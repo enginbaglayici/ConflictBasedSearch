@@ -49,3 +49,7 @@
 /ConflictBasedSearch.sln
 /ConflictBasedSearch/pch.cpp
 /ConflictBasedSearch/pch.h
+/.vs/ConflictBasedSearch/v15/Browse.VC.opendb
+/Conflict based search for optimal multi-agent pathfinding.pdf
+/Conflict-Based Search with Optimal Task Assignment.pdf
+/ICBS.pdf
