@@ -40,7 +40,7 @@
 *.log
 *.idb
 *.tlog
-*.txt
+
 *.user
 *.filters
 *.vcxproj
