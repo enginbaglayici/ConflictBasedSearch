@@ -5,6 +5,8 @@
 #include <map>
 #include <iterator>
 
+#include <limits.h>
+
 
 LowLevelSolver::LowLevelSolver() = default;
 

@@ -1,6 +1,7 @@
 #include "HighLevelSolver.h"
 #include <vector>
 #include <algorithm>
+#include <climits>
 
 
 HighLevelSolver::HighLevelSolver() = default;
@@ -119,35 +120,72 @@ std::vector<std::vector<Cell>> HighLevelSolver::solve(Map map) {
 	while (!isEmpty(tree)) {
 		TreeNode P;
 		P = findBestNode(tree);
-		if (!hasConflict(P)) {
-			return P.getSolution();
+		if (!hasEdgeConflict(P) && !hasConflict(P)){
+		    return P.getSolution();
 		}
-		auto conflict = getFirstConflict(P);
 
-		// Remove current node from tree because it has conflicts.
-		tree.pop_back();
+		else if (hasConflict(P)) {
+            auto conflict = getFirstConflict(P);
 
-		for (int i = 0; i < 2; i++) {
+            // Remove current node from tree because it has conflicts.
+            tree.pop_back();
 
-			// Initialize new node with current nodes constraints
-			TreeNode A(P.getConstraints());
+            for (int i = 0; i < 2; i++) {
 
-			auto newConstraint = Constraint(conflict.conflictedAgentsID.first, conflict.cell1, conflict.time);
+                // Initialize new node with current nodes constraints
+                TreeNode A(P.getConstraints());
 
-			if (i == 1) {
-				newConstraint = Constraint(conflict.conflictedAgentsID.second, conflict.cell2, conflict.time);
-			}
+                auto newConstraint = Constraint(conflict.conflictedAgentsID.first, conflict.cell1, conflict.time);
 
-			// Add new constraint, solve with low level solver and update cost
-			A.addConstraint(newConstraint);
-			A.updateSolution(map);
-			A.updateCost();
+                if (i == 1) {
+                    newConstraint = Constraint(conflict.conflictedAgentsID.second, conflict.cell2, conflict.time);
+                }
 
-			// If a solution found, push it to the tree
-			if (A.getCost() < INT_MAX) {
-				tree.emplace_back(A);
-			}
+                // Add new constraint, solve with low level solver and update cost
+
+                A.addConstraint(newConstraint);
+                A.updateSolution(map);
+                A.updateCost();
+
+                // If a solution found, push it to the tree
+                if (A.getCost() < INT_MAX) {
+                    tree.emplace_back(A);
+                }
+            }
 		}
+
+		else if (hasEdgeConflict(P)) {
+            auto conflict = getFirstConflict(P);
+
+            for (int i = 0; i < 2; i++) {
+
+                // Initialize new node with current nodes constraints
+                TreeNode A(P.getConstraints());
+
+                auto newConstraint = Constraint(conflict.conflictedAgentsID.first, conflict.cell1, conflict.time - 1);
+                auto constrain2 = Constraint(conflict.conflictedAgentsID.first, conflict.cell2, conflict.time);
+                if (i == 1) {
+                    newConstraint = Constraint(conflict.conflictedAgentsID.second, conflict.cell2, conflict.time - 1);
+                    constrain2 = Constraint(conflict.conflictedAgentsID.second, conflict.cell1, conflict.time);
+                }
+
+                // Add new constraint, solve with low level solver and update cost
+
+                A.addConstraint(newConstraint);
+                A.addConstraint(constrain2);
+                A.updateSolution(map);
+                A.updateCost();
+
+                // If a solution found, push it to the tree
+                if (A.getCost() < INT_MAX) {
+                    tree.emplace_back(A);
+                }
+            }
+	    }
+
+        return std::vector<std::vector<Cell>>();
+
+
 	}
 
 	// Return empty vector if there is no solution.
