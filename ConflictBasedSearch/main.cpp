@@ -1,5 +1,6 @@
 // ConflictBasedSearch.cpp : This file contains the 'main' function. Program execution begins and ends there.
 
+#include <chrono>
 #include "LowLevelSolver.h"
 #include "HighLevelSolver.h"
 
@@ -130,12 +131,20 @@ void printSolution(std::vector<std::vector<Cell>> optimalPaths) {
 
 
 int main() {
+    auto started = std::chrono::high_resolution_clock::now();
+
 	std::vector<std::vector<Cell>> optimalPaths;
 	Map map = readMap("data\\map3.txt");
 	printMap(map);
 	HighLevelSolver solver;
 	optimalPaths = solver.solve(map);
 	printSolution(optimalPaths);
-	return 0;
+
+    auto done = std::chrono::high_resolution_clock::now();
+    auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(done-started).count();
+
+    std::cout << elapsedTime << " milliseconds " ;
+
+    return 0;
 }
 
