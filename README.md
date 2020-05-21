@@ -1,7 +1,6 @@
-[![Build Status](https://travis-ci.org/dwyl/esta.svg?branch=master)]
-(https://travis-ci.org/dwyl/esta)
+[![Build Status](https://travis-ci.org/dwyl/esta.svg?branch=master)](https://travis-ci.org/dwyl/esta)
 [![Issues](https://img.shields.io/github/issues-raw/tterb/PlayMusic.svg?maxAge=25000)](https://github.com/enginbaglayici/ConflictBasedSearch/issues)
-[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/enginbaglayici/ConflictBasedSearch/edit/master/LICENSEs)
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/enginbaglayici/ConflictBasedSearch/blob/master/LICENSEs)
 
 # Conflict based search 
 
