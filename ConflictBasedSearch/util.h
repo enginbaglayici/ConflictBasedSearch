@@ -10,7 +10,7 @@ struct Cell {
 	int x, y;
 	int f = 0, g = 0, h = 0;
 	Cell *parent;
-	Cell() { };
+	Cell() = default;
 	Cell(int x, int y) : x(x), y(y) { }
 
 	// "==" operator overload. Two cells are equal if their x and y are same.

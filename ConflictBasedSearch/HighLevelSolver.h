@@ -5,21 +5,17 @@
 class HighLevelSolver
 {
 private:
-	inline bool isEmpty(const std::vector<TreeNode> &tree);
-	bool hasConflict(std::vector<Cell> route1, std::vector<Cell> route2);
-	bool hasConflict(TreeNode P);
-	bool hasEdgeConflict(std::vector<Cell> route1, std::vector<Cell> route2);
-	bool hasEdgeConflict(TreeNode P);
-	int getMinCost(const std::vector<TreeNode> &tree);
-	Conflict getFirstConflict(TreeNode P);
-	TreeNode findBestNode(std::vector<TreeNode> tree);
+	static inline bool isEmpty(const std::vector<TreeNode> &tree);
+	static bool hasConflict(const std::vector<Cell> &route1, const std::vector<Cell> &route2);
+	static bool hasConflict(const TreeNode &P);
+	static bool hasEdgeConflict(const std::vector<Cell> &route1, const std::vector<Cell> &route2);
+	static bool hasEdgeConflict(const TreeNode &P);
+	static int getMinCost(const std::vector<TreeNode> &tree);
+	static Conflict getFirstConflict(const TreeNode &P);
+	static TreeNode findBestNode(const std::vector<TreeNode> &tree);
 
 public:
 	HighLevelSolver();
 	~HighLevelSolver();
-	std::vector<std::vector<Cell>> solve(Map map);
+	static std::vector<std::vector<Cell>> solve(const Map &map);
 };
-
-
-
-

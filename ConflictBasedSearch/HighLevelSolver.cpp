@@ -1,15 +1,15 @@
 #include "HighLevelSolver.h"
 #include <vector>
 #include <algorithm>
+#include <climits>
 
 
 HighLevelSolver::HighLevelSolver() = default;
-
 HighLevelSolver::~HighLevelSolver() = default;
 
 
 // Returns true if there is a conflict between two given routes
-bool HighLevelSolver::hasConflict(std::vector<Cell> route1, std::vector<Cell> route2) {
+bool HighLevelSolver::hasConflict(const std::vector<Cell> &route1, const std::vector<Cell> &route2) {
 	auto min_index = std::min(route1.size(), route2.size());
 	for (int i = 0; i < min_index; i++) {
 		if (route1[i] == route2[i])
@@ -18,7 +18,7 @@ bool HighLevelSolver::hasConflict(std::vector<Cell> route1, std::vector<Cell> ro
 	return false;
 }
 
-bool HighLevelSolver::hasConflict(TreeNode node) {
+bool HighLevelSolver::hasConflict(const TreeNode &node) {
 	auto solutions = node.getSolution();
 	for (int i = 0; i < solutions.size(); i++) {
 		for (int j = i + 1; j < solutions.size(); j++) {
@@ -30,7 +30,7 @@ bool HighLevelSolver::hasConflict(TreeNode node) {
 }
 
 // Returns true if there is an edge conflict between two routes.
-bool HighLevelSolver::hasEdgeConflict(std::vector<Cell> route1, std::vector<Cell> route2) {
+bool HighLevelSolver::hasEdgeConflict(const std::vector<Cell> &route1, const std::vector<Cell> &route2) {
 	auto min_route_size = std::min(route1.size(), route2.size()) - 1;
 	for (int i = 0; i < min_route_size; i++) {
 		if (route1[i] == route2[i + 1] && route1[i + 1] == route2[i])
@@ -39,7 +39,7 @@ bool HighLevelSolver::hasEdgeConflict(std::vector<Cell> route1, std::vector<Cell
 	return false;
 }
 
-bool HighLevelSolver::hasEdgeConflict(TreeNode node) {
+bool HighLevelSolver::hasEdgeConflict(const TreeNode &node) {
 	auto solutions = node.getSolution();
 
 	for (int i = 0; i < solutions.size(); i++) {
@@ -51,7 +51,7 @@ bool HighLevelSolver::hasEdgeConflict(TreeNode node) {
 	return false;
 }
 
-Conflict HighLevelSolver::getFirstConflict(TreeNode P) {
+Conflict HighLevelSolver::getFirstConflict(const TreeNode &P) {
 	auto solutions = P.getSolution();
 
 	// Look for normal conflicts first
@@ -94,7 +94,7 @@ int HighLevelSolver::getMinCost(const std::vector<TreeNode> &tree) {
 }
 
 // Returns first node with minCost
-TreeNode HighLevelSolver::findBestNode(std::vector<TreeNode> tree) {
+TreeNode HighLevelSolver::findBestNode(const std::vector<TreeNode> &tree) {
 	auto minCost = getMinCost(tree);
 	for (const auto &node : tree) {
 		if (node.getCost() == minCost)
@@ -107,7 +107,7 @@ inline bool HighLevelSolver::isEmpty(const std::vector<TreeNode> &tree) {
 	return tree.empty();
 }
 
-std::vector<std::vector<Cell>> HighLevelSolver::solve(Map map) {
+std::vector<std::vector<Cell>> HighLevelSolver::solve(const Map &map) {
 	std::vector<TreeNode> tree;
 
 	auto root = TreeNode();
@@ -119,7 +119,7 @@ std::vector<std::vector<Cell>> HighLevelSolver::solve(Map map) {
 	while (!isEmpty(tree)) {
 		TreeNode P;
 		P = findBestNode(tree);
-		if (!hasConflict(P)) {
+		if (!hasConflict(P) & !hasEdgeConflict(P)) {
 			return P.getSolution();
 		}
 		auto conflict = getFirstConflict(P);

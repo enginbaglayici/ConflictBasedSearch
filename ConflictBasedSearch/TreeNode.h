@@ -11,13 +11,11 @@ private:
 	std::vector<std::vector<Cell>> solution;
 
 public:
-	void setSolution(const std::vector<std::vector<Cell>> &&solution);
 	void addConstraint(const Constraint &constaint);
-	void setConstraint(const Constraint &constaint);
-	void updateSolution(Map map);
+	void updateSolution(const Map &map);
 	void updateCost();
 
-	std::vector<std::vector<Cell>> getSolution();
+	std::vector<std::vector<Cell>> getSolution() const;
 	int getCost() const;
 
 	std::vector<Constraint> getConstraints();

@@ -1,16 +1,14 @@
 #include <algorithm>
 #include "LowLevelSolver.h"
 #include <iostream>
-#include <sstream>
-#include <map>
-#include <iterator>
+
+#include <climits>
 
 
 LowLevelSolver::LowLevelSolver() = default;
-
 LowLevelSolver::~LowLevelSolver() = default;
 
-bool LowLevelSolver::checkStartGoalCells(Cell start, Cell goal, Map map)
+bool LowLevelSolver::checkStartGoalCells(const Cell &start, const Cell &goal, const Map &map)
 {
 	if (!isValid(start.x, start.y, map)) {
 		std::cout << "Start cell is invalid";
@@ -31,11 +29,7 @@ bool LowLevelSolver::checkStartGoalCells(Cell start, Cell goal, Map map)
 	return true;
 }
 
-inline bool LowLevelSolver::isEmpty(const std::vector<Cell> &vec) {
-	return vec.empty();
-}
-
-inline bool LowLevelSolver::isObstacle(Map map, int x, int y) {
+inline bool LowLevelSolver::isObstacle(const Map &map, int x, int y) {
 	/*
 	try {
 		return map.cells[x][y].isObstacle;
@@ -47,14 +41,14 @@ inline bool LowLevelSolver::isObstacle(Map map, int x, int y) {
 	return map.cells[x][y].isObstacle;
 }
 
-inline bool LowLevelSolver::isValid(int x, int y, Map map) {
+inline bool LowLevelSolver::isValid(int x, int y, const Map &map) {
 	size_t a = x;
 	size_t b = y;
 	return (a >= 0) && (a < map.cells.size()) && (b >= 0) && (b < map.cells[0].size()) && !isObstacle(map, a, b);
 }
 
 //checks if the visited cell has a constraint
-bool LowLevelSolver::isConstraint(int agentID, int x, int y, int time, std::vector<Constraint> constraints) {
+bool LowLevelSolver::isConstraint(int agentID, int x, int y, int time, const std::vector<Constraint> &constraints) {
 	for(Constraint c : constraints) {
 		if (agentID == c.agentID) {
 			if (time == c.time && c.cell.x == x && c.cell.y == y) {
@@ -63,11 +57,9 @@ bool LowLevelSolver::isConstraint(int agentID, int x, int y, int time, std::vect
 		}
 	}
 	return false;
-
-	
 }
 
-bool compareF(Cell cell1, Cell cell2) {
+inline bool compareF(const Cell &cell1, const Cell &cell2) {
 	return cell1.f < cell2.f;
 }
 
@@ -76,7 +68,7 @@ inline int LowLevelSolver::findHeuristicDistance(Cell current_cell, Cell goal)
 	return abs(current_cell.x - goal.x) + abs(current_cell.y - goal.y);   //Manhattan distance
 }
 
-void LowLevelSolver::updateCostFunction(Cell &successor, Cell &currentNode, Cell goal, Cell start) {
+void LowLevelSolver::updateCostFunction(Cell &successor, Cell goal, Cell start) {
 	successor.h = 0;
 	successor.g = 0;
 	successor.f = 0;
@@ -86,7 +78,7 @@ void LowLevelSolver::updateCostFunction(Cell &successor, Cell &currentNode, Cell
 	successor.f = successor.g + successor.h;
 }
 
-Cell LowLevelSolver::findMinCostCell(std::vector<Cell> OPEN) {
+Cell LowLevelSolver::findMinCostCell(const std::vector<Cell> &OPEN) {
 	Cell min_cell;
 	int min_value = INT_MAX;
 
@@ -101,10 +93,10 @@ Cell LowLevelSolver::findMinCostCell(std::vector<Cell> OPEN) {
 	return min_cell;
 }
 
-Cell* LowLevelSolver::findParent(std::vector<Cell> OPEN)
+Cell* LowLevelSolver::findParent(const std::vector<Cell> &OPEN)
 {
 	Cell *parent = new Cell;
-	parent = NULL;
+	parent = nullptr;
 	int min_value = INT_MAX;
 
 	for (Cell c : OPEN)
@@ -118,46 +110,18 @@ Cell* LowLevelSolver::findParent(std::vector<Cell> OPEN)
 }
 
 inline bool LowLevelSolver::contains(std::vector<Cell> cells, Cell cell) {
-	for (std::vector<Cell>::iterator it = cells.begin(); it != cells.end(); ++it) {
-		if (*it == cell)
-		{
-			return true;
-		}
-	}
-	return false;
+    return std::count(cells.begin(), cells.end(), cell);
 }
 
-inline int LowLevelSolver::findIndex(std::vector<Cell> cells, Cell cell) {							// BURADA CELLI KARSILASTIRMADA HATA VAR
-	int index = 0;
-	for (Cell c : cells) {
-		if (c == cell)
-		{
-			break;
-		}
-		index++;
-	}
-	return index;
+inline int LowLevelSolver::findIndex(std::vector<Cell> cells, Cell cell) {
+    // BURADA CELLI KARSILASTIRMADA HATA VAR
+    auto it = std::find(cells.begin(), cells.end(), cell);
+    return it != cells.end();
 }
 
-std::vector<Cell> LowLevelSolver::updatePath(std::vector<Cell> cells, std::vector<Constraint> constraints)
-{
-	int index = 0;
-	for (Cell cell : cells)
-	{
-		for (Constraint i : constraints)
-		{
-			if (cell == i.cell)
-			{
-				cells.insert(cells.begin() + (index + 1), cell);
-			}
-		}
-		index++;
-	}
-	return cells;
-}
 
 // for each agent find optimal path
-std::vector<std::vector<Cell>> LowLevelSolver::findOptimalPaths(std::vector<Constraint> constraints, Map map) {
+std::vector<std::vector<Cell>> LowLevelSolver::findOptimalPaths(const std::vector<Constraint> &constraints, const Map &map) {
 	
 	for (auto k = 0; k < map.agents.size(); k++) {
 		optimalPaths.emplace_back(solve(constraints, map, k));
@@ -166,8 +130,8 @@ std::vector<std::vector<Cell>> LowLevelSolver::findOptimalPaths(std::vector<Cons
 	return optimalPaths;
 }
 
-std::vector<Cell> LowLevelSolver::solve(std::vector<Constraint> constraints, Map map, int agentID) {
-	Cell current_cell, temp_cell, child_cell, start, goal, successor;
+std::vector<Cell> LowLevelSolver::solve(const std::vector<Constraint> &constraints, const Map &map, int agentID) {
+	Cell current_cell, child_cell, start, goal, successor;
 	optimalPath.clear();
 	successorCells.clear();
 	std::vector<std::pair<Cell, Cell>> path;
@@ -239,7 +203,7 @@ std::vector<Cell> LowLevelSolver::solve(std::vector<Constraint> constraints, Map
 				break;
 			}
 
-			updateCostFunction(successor, current_cell, goal, start);
+			updateCostFunction(successor, goal, start);
 		
 			if (contains(OPEN, successor))
 			{
@@ -263,7 +227,7 @@ std::vector<Cell> LowLevelSolver::solve(std::vector<Constraint> constraints, Map
 
 			if (!(contains(OPEN, successor)) && !(contains(CLOSE, successor)))
 			{
-				if (&current_cell != NULL)
+				if (&current_cell != nullptr)
 				{
 					successor.f = findHeuristicDistance(successor, goal);
 					path.emplace_back(std::make_pair(successor, current_cell));
