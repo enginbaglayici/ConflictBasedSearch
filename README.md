@@ -4,8 +4,9 @@
 
 # Conflict based search 
 
-For the multi-agent pathfinding problem (MAPF), ConflictBasedSearch algorithm is proposed by Guni Sharon et al. 
-[Conflict-based search for optimal multi-agent pathfinding](http://faculty.cse.tamu.edu/guni/Papers/CBS-AIJ15.pdf)
+This repository contains the implementation of Conflict Based Search algorithm for the multi-agent pathfinding problem (MAPF).  
+Sharon, Guni & Stern, Roni & Felner, Ariel & Sturtevant, Nathan. (2015). [Conflict-based search for optimal multi-agent pathfinding](http://faculty.cse.tamu.edu/guni/Papers/CBS-AIJ15.pdf). Artificial Intelligence. 219. 40-66. 10.1016/j.artint.2014.11.006. 
+
 
 ## Low level search
 
