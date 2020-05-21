@@ -22,7 +22,10 @@ map.txt file with existing test maps under data folder.
 ## Other sources
 [Conflict-based search - video](https://www.youtube.com/watch?v=FnrZyL6965o)
 
-## Contributing
-See CONTRIBUTORS.md
+
+## Contributors
+
+This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
+<a href="https://github.com/enginbaglayici/ConflictBasedSearch//graphs/contributors"><img src="https://opencollective.com/shields/contributors.svg?width=890" /></a>
 
 
