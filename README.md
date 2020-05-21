@@ -17,6 +17,6 @@ For the low level search, any single agent path finding algorithm can be used. W
 For testing and simulation, we are planning to add an UI with the visualization of the algorithm. For now, go the main.cpp and change the
 map.txt file with existing test maps under data folder.
 
-## Contributors
-//TODO
+## Contributing
+See CONTRIBUTORS.md
 
