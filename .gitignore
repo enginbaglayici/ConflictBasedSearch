@@ -1,8 +1,17 @@
+<<<<<<< HEAD
 
 cmake-build-debug
 .idea
 CMakeLists.txt
 
+=======
+.idea
+cmake-build-debug
+CMakeLists.txt
+
+
+
+>>>>>>> 3f52c6e3ab2df89014ab7331fadbee9d8aded953
 # Prerequisites
 *.d
 

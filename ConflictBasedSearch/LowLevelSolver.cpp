@@ -2,7 +2,12 @@
 #include "LowLevelSolver.h"
 #include <iostream>
 
+<<<<<<< HEAD
 #include <climits>
+=======
+#include <limits.h>
+
+>>>>>>> 3f52c6e3ab2df89014ab7331fadbee9d8aded953
 
 
 LowLevelSolver::LowLevelSolver() = default;
