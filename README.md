@@ -26,6 +26,5 @@ map.txt file with existing test maps under data folder.
 ## Contributors
 
 This project exists thanks to all the people who contribute. [[Contribute](CONTRIBUTING.md)].
-<a href="https://github.com/enginbaglayici/ConflictBasedSearch//graphs/contributors"><img src="https://opencollective.com/shields/contributors.svg?width=890" /></a>
 
 
