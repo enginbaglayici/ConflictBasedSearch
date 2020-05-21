@@ -1,3 +1,8 @@
+[![Build Status][travis-image]][travis-url]
+[![Issues](https://img.shields.io/github/issues-raw/tterb/PlayMusic.svg?maxAge=25000)](https://github.com/tterb/Hyde/issues)  
+[![GitHub contributors](https://img.shields.io/github/contributors/cdnjs/cdnjs.svg?style=flat)]()
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
+
 # ConflictBasedSearch
 
 For the multi-agent pathfinding problem (MAPF), ConflictBasedSearch algorithm is proposed by Guni Sharon et al. 
