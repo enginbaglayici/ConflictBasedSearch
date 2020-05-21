@@ -1,13 +1,13 @@
 [![Build Status](https://travis-ci.org/dwyl/esta.svg?branch=master)](https://travis-ci.org/dwyl/esta)
-[![Issues](https://img.shields.io/github/issues-raw/tterb/PlayMusic.svg?maxAge=25000)](https://github.com/enginbaglayici/ConflictBasedSearch/issues)
-[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/enginbaglayici/ConflictBasedSearch/edit/master/LICENSEs)
+[![Issues](https://img.shields.io/github/issues-raw/tterb/PlayMusic.svg?maxAge=25000)](https://github.com/tterb/Hyde/issues)
+[![MIT License](https://img.shields.io/apm/l/atomic-design-ui.svg?)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
 
-# ConflictBasedSearch
+# Conflict based search 
 
 For the multi-agent pathfinding problem (MAPF), ConflictBasedSearch algorithm is proposed by Guni Sharon et al. 
 [Conflict-based search for optimal multi-agent pathfinding](http://faculty.cse.tamu.edu/guni/Papers/CBS-AIJ15.pdf)
 
-## LowLevelSearch
+## Low level search
 
 For the low level search, any single agent path finding algorithm can be used. We used 
 [A* search](https://www.geeksforgeeks.org/a-search-algorithm/) algorithm.
