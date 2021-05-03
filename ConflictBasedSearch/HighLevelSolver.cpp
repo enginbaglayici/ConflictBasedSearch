@@ -117,18 +117,14 @@ std::vector<std::vector<Cell>> HighLevelSolver::solve(const Map &map) {
 	tree.emplace_back(root); // TODO
 
 	while (!isEmpty(tree)) {
-		TreeNode P;
-		P = findBestNode(tree);
-<<<<<<< HEAD
-		if (!hasConflict(P) & !hasEdgeConflict(P)) {
-			return P.getSolution();
-=======
-		if (!hasEdgeConflict(P) && !hasConflict(P)){
-		    return P.getSolution();
->>>>>>> 3f52c6e3ab2df89014ab7331fadbee9d8aded953
-		}
+	    TreeNode P;
+	    P = findBestNode(tree);
 
-		else if (hasConflict(P)) {
+	    if (!hasEdgeConflict(P) && !hasConflict(P)){
+		return P.getSolution();
+	    }
+
+	    else if (hasConflict(P)) {
             auto conflict = getFirstConflict(P);
 
             // Remove current node from tree because it has conflicts.
